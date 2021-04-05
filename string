@@ -1,0 +1,252 @@
+
+#include<iostream>
+#include<cassert>
+#include<string>
+using namespace std;
+
+//class String
+//
+//{
+//
+//	char* _str;
+//
+//public:
+//
+//	String(const char* str = "")
+//		
+//	{
+//		_str = new char[strlen(str) + 1];
+//		strcpy(_str, str);
+//	}
+//
+//	String(const String& s)
+//		:_str(new char[strlen(s._str)+1])
+//	{
+//		strcpy(_str, s._str);
+//		
+//	}
+//
+//	String& operator=(const String& s)
+//	{
+//		if (this != &s)
+//		{
+//			delete[]_str;
+//			_str = new char[strlen(s._str) + 1];
+//			strcpy(_str, s._str);
+//		}
+//		return *this;
+//	}
+//	~String()
+//	{
+//		delete[]_str;
+//		_str = nullptr;
+//	}
+//
+//
+//
+//
+//};
+//
+//
+//
+const size_t npos = -1;
+class  String
+{
+	size_t _size;
+	size_t _capacity;
+	char* _data;
+	static const size_t npos;
+public:
+	void pushBack(const char& ch)
+	{
+		//判断有无空余空间
+		if (_size == _capacity)
+		{
+			//申请空间大小
+			size_t news = _capacity == 0 ? 15 : 2 * _capacity;
+			reserve(news);
+		}
+		//将ch插入到最后一个字符的位置
+		_data[_size] = ch;
+		//元素增加一个
+		++_size;
+		//‘\0'后移
+		_data[_size] = '\0';
+	}
+	void append(const char* str)
+	{
+		//1.检查容量
+		if (_size + strlen(str) > _capacity)
+		{
+			reserve(_size + strlen(str));
+		}
+		//2.insert
+		memcpy(_data + _size, str, sizeof(char) * strlen(str));
+		//3.update
+		_size += strlen(str);
+		_data[_size] = '\0';
+
+	}
+	string operator+(const string& str1, const string& str2)
+	{
+		string str = str1;
+		str += str2;
+		return str;
+	}
+	string operator+(const char* str1, const string str2)
+	{
+		string str;
+		str.append(str1);
+		str += str2;
+		return str;
+	}
+	string operator+(const char ch, const string str2)
+	{
+		string str;
+		pushBack(ch);
+		str += str2;
+		return str;
+	}
+
+	void insert(size_t pos, const char* ptr)
+	{
+		//check position
+		assert(pos <= _size);
+		int len = strlen(ptr);
+		//1.check capacity
+		if (_size + len > _capacity)
+		{
+			reserve(_size + len);
+		}
+		//2.move element
+		size_t end = _size + len;
+		while (end > pos + end - 1)
+		{
+			_data[end] = _data[end - len];
+			--end;
+		}
+		//3.insert
+		for (int i = 0; i < len; ++i)
+		{
+			_data[i + pos] = ptr[i];
+		}
+		//mmecpy(_data + pos, ptr, sizeof(char) * len);
+		//4.update
+		_size += len;
+	}
+
+	void erase(size_t pos, size_t len = npos)
+	{
+		//from pos to start,delete all surplus elements
+		if (len == npos||pos+len>=_size)
+		{
+			_size = pos;
+			_data[_size] = '\0';
+		}
+		else
+		{
+			//element move position len
+			size_t start = pos + len;
+			//[pos+len,size]
+			while (start <= _size)
+			{
+				_data[start - len] = _data[start];
+				++start;
+			}
+			//update
+			_size -= len;
+		}
+	}
+	size_t find(const char& ch, size_t pos = 0)//default
+	{
+		assert(pos < _size);
+		for (size_t i = pos; i < _size; ++i)
+		{
+			if (_data[i] == ch)
+				return i;
+		}
+		//no find or position break bounds
+		return npos;
+	}
+	size_t find(const char* ptr, size_t pos = 0)
+	{
+		assert(pos < _size);
+		char* ptrPos = strstr(_data+pos,ptr);
+		if (ptrPos)
+		{
+			return ptrPos - _data;
+		}
+		return npos;
+	}
+	String substr(size_t pos, size_t len=npos)
+	{
+		assert(len==npos||pos < _size);
+		if (pos + len >= _size)
+		{
+			return String(_data + pos);
+		}
+		else
+		{
+			char* newC = new char[len + 1];
+			memcpy(newC, _data+pos, sizeof(char)*len);
+			newC[len] = '\0';
+			
+			return String(newC);
+			delete[]newC;
+
+		}
+
+	}
+	String(const String& str)
+		:_data(new char[sizeof(str._data)+1])
+	{
+		strcpy(_data, str._data);
+	}
+	String(const char* str = "")
+	{
+		_data = new char[strlen(str) + 1];
+		strcpy(_data, str);
+	}
+	
+		
+};
+bool operator<(const string& str1, const string& str2)
+{
+	int ret = strcmp(str1.c_str(), str2.c_str());
+	if (ret < 0)
+		return false;
+	return true;
+}
+bool operator==(const string& str1, const string& str2)
+{
+	int ret = strcmp(str1.c_str(), str2.c_str());
+	if (ret == 0)
+		return true;
+	return false;
+}
+bool operator<=(const string& str1, const string& str2)
+{
+	return (str1 == str2) && (str1 < str2);
+
+}
+bool operator>=(const string& str1, const string& str2)
+{
+	return  !(str1 < str2);
+}
+ostream& operator<<(ostream& out, const string& str)
+{
+	for (const auto& ch :str)
+	out << ch;
+	return out;
+	
+}istream& operator>>(istream& in,  string& str)
+{
+	char ch;
+	while ((ch = getchar()) != EOF)
+	{
+		if (ch == ' ' || ch == '\n')
+			break;
+		str += ch;
+	}
+	return cin;
+}
