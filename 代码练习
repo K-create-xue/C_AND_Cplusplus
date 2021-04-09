@@ -1,0 +1,79 @@
+#include<iostream>
+#include<windows.h>
+
+using namespace std;
+
+void test()
+{
+	int arry[] = { 1,4,3,6,3,6,3,6,4 };
+	for (const int m : arry)
+		cout << m << " ";
+	int arr_num = sizeof(arry)/sizeof(arry[0]);
+	for (int i = 0; i < arr_num ; ++i)
+	{
+		for (int j = i; j < arr_num; ++j)
+		{
+			if (arry[i] < arry[j])
+				swap(arry[i], arry[j]);
+		}
+	}
+	cout << endl;
+	for (const int m : arry)
+		cout << m << " ";
+}
+
+/*void test()
+{
+	char arr1[] = "welcome to bit.。.";
+	char arr2[] = "#################";
+	int left = 0;
+	int count = 0;
+	int right = strlen(arr2)-1;
+	cout << arr2 << endl;
+	while (left <= right)
+	{
+		system("cls");
+		arr2[left] = arr1[left];
+		arr2[right] = arr1[right];	cout << arr2 << endl;
+		Sleep(1000);
+		++left; --right;
+	}
+}*/
+int main()
+{
+	test();
+	return 0;
+}
+int test(int* arr,int n,int key)
+{
+	
+	int low = 0, high = n - 1, mid = 0, index = -1;
+	while (low <= high)
+	{
+		mid = (low + high) / 2;
+		if (key == arr[mid])
+		{
+			index = mid;
+		}
+		else if (key < arr[mid])
+		{
+			high = mid-1;
+		}
+		else
+			low = mid+1;
+	}
+	
+	return index;
+}
+int main()
+{
+	int key = 0;
+	cin >> key;
+	int arr[] = { 1,2,3,5,6,7,8,33 };
+	int n = 8;
+	int num=test(arr,8,key);
+	if (num == -1)
+		cout << "no found" << endl;
+	cout << num << endl;
+	return 0;
+}
