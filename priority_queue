@@ -1,0 +1,137 @@
+
+#include<iostream>
+#include<queue>
+#include<vector>
+#include<list>
+using namespace std;
+
+struct A
+{
+	int _a;
+	A(int a)
+		:_a(a)
+	{
+	}
+	bool operator<(const A& a)const
+	{
+		return _a > a._a;
+	}
+
+};
+
+int main()
+{
+	priority_queue<A> pq;
+	pq.push(A(1));
+	pq.push(A(3));
+	pq.push(A(2));
+	pq.push(A(9));
+	pq.push(A(8));
+
+	while (!pq.empty())
+	{
+		cout << pq.top()._a << ' ';
+		pq.pop();
+	}
+	cout << endl;
+	return 0;
+}
+
+struct A
+{
+	int _a;
+	A(int a)
+		:_a(a)
+	{}
+	bool operator<(const A& a)const
+	{
+		return _a > a._a;
+	}
+};
+int main()
+{
+	priority_queue<A> q;
+	q.push(A(1));
+	q.push(A(5));
+	q.push(A(2));
+	q.push(A(4));
+
+	while (!q.empty())
+	{
+		cout << q.top()._a << ' ';
+		q.pop();
+	}
+	cout << endl;
+	return 0;
+}
+
+
+int main()
+{
+	priority_queue<int> pq;
+	pq.push(0);
+	pq.push(3);
+	pq.push(5);
+	pq.push(1);
+	pq.push(4);
+	pq.push(2);
+	while (!pq.empty())
+	{
+		cout << pq.top() << ' ';
+		pq.pop();
+	}
+	cout << endl;
+	return 0;
+}
+
+
+template<class T>
+class Queue
+{
+	list<T> _q;
+public:
+	void push(const T& val)
+	{
+		_q.push_back(val);
+		_q.push_front(val);
+	}
+	void pop()
+	{
+		_q.pop_front();
+		_q.pop_back();
+	}
+	T& front()
+	{
+		return _q.front();
+		return _q.back();
+	}
+	T& back()
+	{
+		return _q.back();
+	}
+	size_t size()const
+	{
+		return _q.size();
+	}
+	bool empty()
+	{
+		return _q.empty();
+	}
+
+};
+int main()
+{
+	Queue<int> Q;
+	Q.push(0);
+	Q.push(1);
+	Q.push(2);
+
+	while (!Q.empty())
+	{
+		cout << Q.front() << ' ';
+		Q.pop();
+
+
+	}
+	cout << endl;
+}
