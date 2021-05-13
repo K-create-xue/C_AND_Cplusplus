@@ -1,0 +1,151 @@
+////set  存储不重复的数据，重复则去除；
+////实验：map的[]；key值可以有重复？？
+//#include<map>
+//#include<iostream>
+//#include<functional>
+//#include<map>
+//using namespace std;
+//
+////void test() {
+////	map<int, int> m;
+////	//错误方式：
+////	//auto ret=m.insert(1,1);
+////	//两种常见插入对象
+////	auto ret = m.insert(pair<int, int>(1, 1));
+////	//1.
+////	cout << ret.first->first << "--->" << ret.first->second << "insert:" << endl;
+////
+////}
+//
+//void test() {
+//	
+//	map<int, int> m;
+//	m.insert(1,3);
+//	m.insert(2,4);
+//	m.insert(3,5);
+//	m.insert(3,5);
+//	m.insert(3,4);
+//	m.insert(3,3);
+//
+//
+//
+//	for (auto& e : m) {
+//		cout << e.first<<"-->"<<e.second<< endl;
+//	}
+//}
+//int main() {
+//	test();
+//	return 0;
+//}
+
+
+#include<iostream>
+#include<set>
+#include<map>
+using namespace std;
+
+template<class T1,class T2>
+void printMap(const map<T1, T2>& m) {
+	 typename std::map<T1, T2>::const_iterator it = m.begin();
+	while (it != m.end()) {
+		cout << it->first << "---->" << it->second << endl;
+		++it;
+	}
+}
+
+template<class T1, class T2>
+void printMap2(const map<T1, T2,greater<T1>>& m) {
+	typename std::map<T1, T2>::const_iterator it = m.begin();
+	while (it != m.end()) {
+		cout << it->first << "---->" << it->second << endl;
+		++it;
+	}
+}
+void test() {
+	map<int, int> m;
+	map<int, int,greater<int>> m2;
+	pair<int, int> arr[] = {pair<int,int>(4,4),make_pair(5,5),pair<int,int>(6,6)};
+	m2.insert(arr, arr + sizeof(arr) / sizeof(arr[0]));
+	auto ret = m.insert(pair<int, int>(1, 1));
+	 ret = m.insert(pair<int, int>(2, 2));
+	 ret = m.insert(make_pair(3, 3));
+	 printMap(m);
+	 printMap2(m2);
+
+
+}
+
+
+//
+//template<class T>
+//void printSet(const set<T>& s) {
+//	for ( auto& e : s) {
+//		cout << e << ' ';
+//	}
+//	cout << endl;
+//}
+//template<class T>
+//void printSet2(const set<T,greater<T>>& s) {
+//	for (auto& e : s) {
+//		cout << e << ' ';
+//	}
+//	cout << endl;
+//}
+//void test() {
+//
+//	//set<int,greater<int>> s;
+//	int arr[] = { 24,5,6,7,3,3 };
+//	std::set<int, greater<int>> s3(arr, arr + sizeof(arr) / sizeof(arr[0]));
+//	//printSet2(s3);
+//	for (auto& e : s3) {
+//		cout << e << ' ';
+//	}
+//	cout << endl;
+//	std::set<int> s2(arr, arr + sizeof(arr) / sizeof(arr[1]));
+//	std::set<int>::iterator it = s2.begin();
+//	//while (it != s2.end()) {
+//	//	cout << *it << ' ';
+//		//set不支持修改，红黑树保存，修改导致数据顺序变化
+//		//*it=10;
+//	//	++it;
+//	//}
+//	printSet(s2);
+//	cout << endl;
+//
+//	cout << "reverse iterator:" << endl;
+//	set<int>::reverse_iterator r_it = s2.rbegin();
+//
+//	//insert:插入失败：已有数据迭代器，false
+//	pair<set<int>::iterator, bool> ret = s2.insert(3);
+//	cout << *ret.first << ' ' << ret.second << endl;
+//	
+//	ret=s2.insert(10);
+//	cout << *ret.first << ' ' << ret.second << endl;
+//	s3.insert(s3.begin(), 1);
+//	printSet2(s3);
+//
+//	int num = s2.erase(5);
+//	cout << num << endl;
+//	printSet(s2);
+//	num = s2.erase(50);
+//	cout << num << endl;
+//	printSet(s2);
+//
+//	auto it_f = s2.find(7);
+//	cout << (it_f != s2.end()) << endl;
+//	it_f = s2.find(600);
+//	cout << (it_f != s2.end()) << endl;
+//
+//	s2.erase(++s2.begin(), --s2.end());
+//	printSet(s2);
+//
+//	cout << s2.count(3) << "-----"<<s2.count(1000) << endl;
+//
+//
+//}
+//
+
+int main() {
+	test();
+	return 0;
+}
