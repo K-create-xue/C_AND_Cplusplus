@@ -1,0 +1,130 @@
+#include<iostream>
+#include<time.h>
+using namespace std;
+template<class T>
+struct BNode {
+	T _data;
+	typedef BNode<T> Node;
+	Node* _left;
+	Node* _right;
+
+	BNode(const T& data)
+		:_data(data)
+		, _left(nullptr)
+		, _right(nullptr) {
+	}
+};
+template<class T>
+class BSTree {
+public:
+	typedef BNode<T> Node;
+	Node* find(const T& val) {
+		Node* cur = _root;
+		while(cur) {
+			if(cur->_data == val)
+				return cur;
+			else if(cur->_data > val)
+				cur = cur->_left;
+			else
+				cur = cur->_right;
+		}
+		
+	}
+
+	BSTree()
+		:_root(nullptr) {
+	}
+	bool insert(const T& val) {
+		//根节点为空
+		if (_root == nullptr) {
+			_root = new Node(val);
+			return true;
+		}
+		Node* cur = _root;
+		Node* parent = nullptr;
+		while (cur) {
+			parent = cur;
+			if (cur->_data == val)
+				return false;
+			else if (cur->_data > val)
+				cur = cur->_left;
+			else
+				cur = cur->_right;
+		}
+		//插入
+		cur =  new Node(val);
+		if (parent->_data > val)
+			parent->_left = cur;
+		else
+			parent->_right = cur;
+		return true;
+	}
+
+	void inorder() {
+		_inorder(_root);
+	}
+	void _inorder(Node* root) {
+		if (root) {
+			_inorder(root->_left);
+			cout << root->_data << endl;;
+			_inorder(root->_right);
+		}
+	}
+
+	~BSTree() {
+		if (_root) {
+			destroy(_root);		//调用destory函数
+			_root = nullptr;	//将根节点置空
+		}
+	}
+	void destroy(Node* root) {
+		if (root) {
+			destroy(root->_left);
+			destroy(root->_right);
+			delete root;
+		}
+	}
+	Node* copy(Node* root) {
+		if (root == nullptr)
+			return nullptr;
+		Node* newNode = new Node(root->_data);
+		newNode->_left = copy(root->_left);
+		newNode->_right = copy(root->_right);
+		return newNode;
+	}
+
+	BSTree(const BSTree<T>& bstree)
+		:_root(copy(bstree._root)) {
+	}
+private:
+	Node* _root;
+};
+
+//void test() {
+//
+//	BSTree<int> b;
+//	srand(time(nullptr));
+//	int num;
+//	cin >> num;
+//	for (int i = 0; i < num; ++i) {
+//		b.insert(rand());
+//	}
+//	b.inorder();
+//}
+//void test() {
+//	BSTree<int> b;
+//	b.insert(50);
+//	b.insert(40);
+//	b.insert(90);
+//	b.insert(30);
+//	b.insert(20);
+//	b.insert(10);
+//	b.insert(20);		
+//	
+//	b.inorder();
+//}
+
+//int main() {
+//	test();
+//	return 0;
+//}
