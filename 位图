@@ -1,0 +1,37 @@
+#include<vector>
+using namespace std;
+//用于存储不重复数据的简单信息，不需要存放数据本身
+//节省空间，查找效率高o（1）
+class Bitmap {
+public:
+	//位图大小和数据范围有关
+	Bitmap(size_t range)
+		:_bit(range/32+1)
+	{ }
+	//存储信息
+	void set(size_t num) {
+		//计算位置
+		//计算整数位置:/32
+		int idx = num / 32;
+		//计算比特位位置:%32
+		int bitIdx = num % 32;
+		//把对应比特位变为1
+		//按位或运算
+		_bit[idx] |= 1 << bitIdx;
+	}
+	//查找信息
+	bool test(size_t num) {
+		int idx = num / 32;
+		int bitIdx = num % 32;
+		return _bit[idx] & (1 << bitIdx);
+	}
+	//删除信息
+	void reset(size_t num) {
+		int idx = num / 32;
+		int bitIdx = num % 32;
+		_bit[idx] &= ~(1 << bitIdx);
+		}
+private:
+	//整数数组
+	vector<int> _bit;
+};
